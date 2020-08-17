@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: route_id
+        predicates:
+        - Path=/**
+        uri: https://api.mercadolibre.com/
+        filters:
+        - StripPrefix=1
+        - name: RequestRateLimiter
+          args:
+            key-resolver: "#{@userKeyResolver}"
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 5
+            #redis-rate-limiter.requestedTokens: 60
+  redis:    url: redis://localhost:6379
